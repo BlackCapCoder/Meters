@@ -1,6 +1,6 @@
 import Data.Map as M
 import Data.Maybe
-import Control.Category ((<<<))
+import Control.Category ((>>>))
 
 data Kind = Clock | Scale | Thermometer
           deriving Show
@@ -34,10 +34,10 @@ move a b m = maybe id (insert a) (M.lookup b m)
            $ maybe id (insert b) (M.lookup a m) m
 
 main = print . fromJust . M.lookup "M3"
-             . vandalize "M2"
-           <<< move "M2" "M3"
-           <<< vandalize "M4"
-           <<< move "M4" "M3"
+             $ vandalize "M2"
+           >>> move "M2" "M3"
+           >>> vandalize "M4"
+           >>> move "M4" "M3"
              $ fromList
                  [ ("M1", Meter Clock           0.01       (1/0) False)
                  , ("M2", Meter Thermometer (-273.15)      (1/0) False)
