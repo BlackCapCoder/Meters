@@ -40,6 +40,7 @@ move :: Position -> Position -> MeterArchine -> MeterArchine
 move a b = (M.lookup b >>> maybe id (insert a))
        <*> (M.lookup a >>= maybe id (insert b))
 
+
 main :: IO ()
 main = vandalize "M2"
    >>> move "M2" "M3"
