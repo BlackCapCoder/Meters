@@ -16,8 +16,6 @@ data Meter = Meter
   , broken :: Bool
   }
 
-type MeterArchine = Map String Meter
-
 instance Show Meter where
   show m = concat
     [ show $ kind m
@@ -28,11 +26,21 @@ instance Show Meter where
     , if broken m then ", broken" else mempty
     ]
 
+type Position     = String
+type MeterArchine = Map Position Meter
+
+
+setBroken :: Bool -> MeterArchine -> MeterArchine
 setBroken b m = m { broken = b }
+
+vandalize :: MeterArchine -> MeterArchine
 vandalize = adjust $ setBroken True
+
+move :: Position -> Position -> MeterArchine -> MeterArchine
 move a b = (M.lookup b >>> maybe id (insert a))
        <*> (M.lookup a >>= maybe id (insert b))
 
+main :: IO ()
 main = vandalize "M2"
    >>> move "M2" "M3"
    >>> vandalize "M4"
