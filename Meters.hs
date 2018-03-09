@@ -30,10 +30,10 @@ type Position     = String
 type MeterArchine = Map Position Meter
 
 
-setBroken :: Bool -> MeterArchine -> MeterArchine
+setBroken :: Bool -> Meter -> Meter
 setBroken b m = m { broken = b }
 
-vandalize :: MeterArchine -> MeterArchine
+vandalize :: Position -> MeterArchine -> MeterArchine
 vandalize = adjust $ setBroken True
 
 move :: Position -> Position -> MeterArchine -> MeterArchine
