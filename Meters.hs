@@ -30,8 +30,8 @@ instance Show Meter where
 
 setBroken b m = m { broken = b }
 vandalize = adjust $ setBroken True
-move a b m = maybe id (insert a) (M.lookup b m)
-           $ maybe id (insert b) (M.lookup a m) m
+move a b = (M.lookup b >>> maybe id (insert a))
+       <*> (M.lookup a >>= maybe id (insert b))
 
 main = print . fromJust . M.lookup "M3"
              $ vandalize "M2"
