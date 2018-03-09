@@ -1,5 +1,5 @@
 import Data.Map as M
-import Data.Maybe (maybe)
+import Data.Maybe
 import Control.Category ((<<<))
 
 data Kind = Clock | Scale | Thermometer
@@ -30,17 +30,14 @@ instance Show Meter where
 
 setBroken b m = m { broken = b }
 vandalize = adjust $ setBroken True
+move a b m = maybe id (insert a) (M.lookup b m)
+           $ maybe id (insert b) (M.lookup a m) m
 
-move a b m = maybe id (insert b) (M.lookup b m)
-           . flip (insert a) m <$> M.lookup a m
-
-
-try f m | Just x <- f m = x | otherwise = m
-
-main = print . vandalize "M2"
-           <<< try (move "M2" "M3")
+main = print . fromJust . M.lookup "M3"
+             . vandalize "M2"
+           <<< move "M2" "M3"
            <<< vandalize "M4"
-           <<< try (move "M4" "M3")
+           <<< move "M4" "M3"
              $ fromList
                  [ ("M1", Meter Clock           0.01       (1/0) False)
                  , ("M2", Meter Thermometer (-273.15)      (1/0) False)
