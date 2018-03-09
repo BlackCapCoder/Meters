@@ -21,7 +21,12 @@ class Client {
      || m.move("M4", "M3")
       );
 
+
     Meter tst = m.get("M3");
-    System.out.println(tst.toString());
+    System.out.println
+      ( tst==null
+      ? "Nothing here"
+      : tst.toString()
+      );
   }
 }

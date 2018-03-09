@@ -33,13 +33,13 @@ vandalize = adjust $ setBroken True
 move a b = (M.lookup b >>> maybe id (insert a))
        <*> (M.lookup a >>= maybe id (insert b))
 
-main = print $ vandalize "M2"
-           >>> move "M2" "M3"
-           >>> vandalize "M4"
-           >>> move "M4" "M3"
-           >>> fromJust . M.lookup "M3"
-             $ fromList
-                 [ ("M1", Meter Clock           0.01       (1/0) False)
-                 , ("M2", Meter Thermometer (-273.15)      (1/0) False)
-                 , ("M3", Meter Scale            200  (200*1000) False)
-                 ]
+main = vandalize "M2"
+   >>> move "M2" "M3"
+   >>> vandalize "M4"
+   >>> move "M4" "M3"
+   >>> putStrLn . maybe "Nothing here" show . M.lookup "M3"
+     $ fromList
+         [ ("M1", Meter Clock           0.01       (1/0) False)
+         , ("M2", Meter Thermometer (-273.15)      (1/0) False)
+         , ("M3", Meter Scale            200  (200*1000) False)
+         ]
