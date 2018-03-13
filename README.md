@@ -27,4 +27,4 @@ Go ahead- have a look at the Haskell. Consider how much nicer it is than java, a
 3.76s
 ```
 
-I also solved this in 3 lines of Vim. It input/output should be JSON.
+I also solved this in 3 lines of Vim. Input/output should be JSON, as such this solves the optional task as well.
