@@ -2,8 +2,8 @@ class Thermometer extends Meter {
   private float minTemp;
   private float maxTemp;
 
-  public Thermometer (String ID, float min, float max) {
-    super(ID);
+  public Thermometer (String reg, String pos, float min, float max) {
+    super(reg, pos);
     minTemp = min;
     maxTemp = max;
   }

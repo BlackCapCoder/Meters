@@ -1,8 +1,8 @@
 class Clock extends Meter {
   private float minSecs;
 
-  public Clock (String ID, float min) {
-    super(ID);
+  public Clock (String reg, String pos, float min) {
+    super(reg, pos);
     minSecs = min;
   }
 

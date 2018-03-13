@@ -2,8 +2,8 @@ class Scale extends Meter {
   private float minWeight;
   private float maxWeight;
 
-  public Scale (String ID, float min, float max) {
-    super(ID);
+  public Scale (String reg, String pos, float min, float max) {
+    super(reg, pos);
     minWeight = min;
     maxWeight = max;
   }
