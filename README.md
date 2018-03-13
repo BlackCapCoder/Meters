@@ -26,3 +26,5 @@ Go ahead- have a look at the Haskell. Consider how much nicer it is than java, a
 > time (for i in `seq 1 10000`; do ./main > /dev/null; done)
 3.76s
 ```
+
+I also solved this in 3 lines of Vim. It input/output should be JSON.
