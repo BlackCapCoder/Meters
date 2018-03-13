@@ -27,7 +27,7 @@ setBroken x m = m { broken = x }
 instance MultiKeyable Meter where
   empty = MultiKey [key reg, key pos]
 
-type MeterArchine = MultiKey Meter
+type MeterArchive = MultiKey Meter
 
 instance Show Meter where
   show m = unlines
