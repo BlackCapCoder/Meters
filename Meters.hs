@@ -5,6 +5,10 @@ import Control.Category ((>>>))
 data Kind = Clock | Scale | Thermometer
           deriving (Eq, Show)
 
+unit Clock       = "seconds"
+unit Scale       = "grams"
+unit Thermometer = "celcius"
+
 newtype Reg = Reg { unReg :: String } deriving (Eq, Ord)
 newtype Pos = Pos { unPos :: String } deriving (Eq, Ord)
 
@@ -28,12 +32,13 @@ type MeterArchine = MultiKey Meter
 instance Show Meter where
   show m = unlines
     [ show $ kind m
-    , "intv: " ++ show (minVal m) ++ " - " ++ show (maxVal m)
+    , "intv: " ++ show (minVal m) ++ " - "
+               ++ show (maxVal m) ++ " " ++ unit (kind m)
     , "reg:  " ++ unReg (reg m)
     , "pos:  " ++ unPos (pos m)
     , "stat: " ++ if broken m
                      then "broken!"
-                     else "working"
+                     else "fine"
     ]
 
 
@@ -54,13 +59,13 @@ main :: IO ()
 main = id
    >>> vandalize (Pos "M2")
    >>> move      (Reg "T" ) (Pos "M3")
-   >>> vandalize (Pos "M4")
+   >>> vandalize (Reg "Q")
    >>> move      (Reg "T" ) (Pos "M3")
    >>> putStrLn . maybe "Nothing here" show
                 . M.lookup (Pos "M3")
      $ fromList
-        [ Meter (Reg "C") (Pos "M1") Clock       (-273.15)      (1/0) False
-        , Meter (Reg "T") (Pos "M2") Thermometer     0.01       (1/0) False
+        [ Meter (Reg "C") (Pos "M1") Clock           0.01       (1/0) False
+        , Meter (Reg "T") (Pos "M2") Thermometer (-273.15)      (1/0) False
         , Meter (Reg "S") (Pos "M3") Scale            200  (200*1000) False
         ]
 
