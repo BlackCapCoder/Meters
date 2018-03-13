@@ -2,9 +2,9 @@ class Client {
   MeterArchine m = new MeterArchine ();
 
   public void mainMethod () {
-    Clock       c = new Clock ((float) 0.01);
-    Thermometer t = new Thermometer ((float) -273.15, Float.MAX_VALUE);
-    Scale       s = new Scale (200, 200 * 1000);
+    Clock       c = new Clock       ("A", (float) 0.01);
+    Thermometer t = new Thermometer ("B", (float) -273.15, Float.MAX_VALUE);
+    Scale       s = new Scale       ("C", 200, 200 * 1000);
 
     m.put("M1", c);
     m.put("M2", t);

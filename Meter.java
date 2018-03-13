@@ -9,6 +9,16 @@ abstract class Meter {
   public Boolean getBroken (         ) { return broken; }
   public void toggleBroken (         ) { broken = !broken; }
 
+  private String ID;
+  public String getID () { return ID; }
+  public void setID (String id) { this.ID = id; }
+
+
+  public Meter (String id) {
+    this.ID = id;
+  }
+
+
   public Boolean equals (Meter b) {
     Meter a = this;
 
@@ -16,13 +26,14 @@ abstract class Meter {
 
     return a.getMinValue() == b.getMinValue()
         && a.getMaxValue() == b.getMaxValue()
+        && a.getID()       == b.getID()
          ;
   }
 
   public String toString () {
     String name = this.getClass().getName();
 
-    return name + ", measures "
+    return name + ":" + this.ID + ", measures "
          + Float.toString(this.getMinValue()) + "-"
          + Float.toString(this.getMaxValue()) + " "
          + this.getUnit().toLowerCase()

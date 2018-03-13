@@ -1,54 +1,66 @@
-import Data.Map as M
+import Data.Map.MultiKey as M
 import Data.Maybe
 import Control.Category ((>>>))
 
 data Kind = Clock | Scale | Thermometer
-          deriving (Show, Eq)
+          deriving (Eq, Show)
 
-unit Clock       = "seconds"
-unit Scale       = "grams"
-unit Thermometer = "celcius"
+newtype Reg = Reg { unReg :: String } deriving (Eq, Ord)
+newtype Pos = Pos { unPos :: String } deriving (Eq, Ord)
 
 data Meter = Meter
-  { kind   :: Kind
+  { reg    :: Reg
+  , pos    :: Pos
+  , kind   :: Kind
   , minVal :: Float
   , maxVal :: Float
   , broken :: Bool
   } deriving Eq
 
+setPos    x m = m { pos    = x }
+setBroken x m = m { broken = x }
+
+instance MultiKeyable Meter where
+  empty = MultiKey [key reg, key pos]
+
+type MeterArchine = MultiKey Meter
+
 instance Show Meter where
-  show m = concat
+  show m = unlines
     [ show $ kind m
-    , ", measures "
-    , show $ minVal m, "-"
-    , show $ maxVal m, " "
-    , unit $ kind m
-    , if broken m then ", broken" else mempty
+    , "intv: " ++ show (minVal m) ++ " - " ++ show (maxVal m)
+    , "reg:  " ++ unReg (reg m)
+    , "pos:  " ++ unPos (pos m)
+    , "stat: " ++ if broken m
+                     then "broken!"
+                     else "working"
     ]
 
-type Position     = String
-type MeterArchine = Map Position Meter
 
+vandalize k = maybe id (M.updateKey k . setBroken True)
+                =<< M.lookup k
 
-setBroken :: Bool -> Meter -> Meter
-setBroken b m = m { broken = b }
-
-vandalize :: Position -> MeterArchine -> MeterArchine
-vandalize = adjust $ setBroken True
-
-move :: Position -> Position -> MeterArchine -> MeterArchine
-move a b = (M.lookup b >>> maybe id (insert a))
-       <*> (M.lookup a >>= maybe id (insert b))
+move r p =
+  maybe id (\x m
+    -> M.deleteKey p
+   >>> M.updateKey r (setPos p x)
+   >>> ( maybe id (M.insert . setPos (pos x))
+           =<< const (M.lookup p m) )
+     $ m
+  ) =<< M.lookup r
 
 
 main :: IO ()
-main = vandalize "M2"
-   >>> move "M2" "M3"
-   >>> vandalize "M4"
-   >>> move "M4" "M3"
-   >>> putStrLn . maybe "Nothing here" show . M.lookup "M3"
+main = id
+   >>> vandalize (Pos "M2")
+   >>> move      (Reg "T" ) (Pos "M3")
+   >>> vandalize (Pos "M4")
+   >>> move      (Reg "T" ) (Pos "M3")
+   >>> putStrLn . maybe "Nothing here" show
+                . M.lookup (Pos "M3")
      $ fromList
-         [ ("M1", Meter Clock           0.01       (1/0) False)
-         , ("M2", Meter Thermometer (-273.15)      (1/0) False)
-         , ("M3", Meter Scale            200  (200*1000) False)
-         ]
+        [ Meter (Reg "C") (Pos "M1") Clock       (-273.15)      (1/0) False
+        , Meter (Reg "T") (Pos "M2") Thermometer     0.01       (1/0) False
+        , Meter (Reg "S") (Pos "M3") Scale            200  (200*1000) False
+        ]
+
