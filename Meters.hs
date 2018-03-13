@@ -3,7 +3,7 @@ import Data.Maybe
 import Control.Category ((>>>))
 
 data Kind = Clock | Scale | Thermometer
-          deriving Show
+          deriving (Show, Eq)
 
 unit Clock       = "seconds"
 unit Scale       = "grams"
@@ -14,7 +14,7 @@ data Meter = Meter
   , minVal :: Float
   , maxVal :: Float
   , broken :: Bool
-  }
+  } deriving Eq
 
 instance Show Meter where
   show m = concat
