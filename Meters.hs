@@ -42,7 +42,7 @@ instance Show Meter where
     ]
 
 
--- This is far from good practive in haskell, but
+-- This is far from good practice in haskell, but
 -- this mimics the java solution as closely as possible
 
 vandalize k = maybe id (M.updateKey k . setBroken True)
