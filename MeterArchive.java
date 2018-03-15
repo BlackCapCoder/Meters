@@ -12,7 +12,11 @@ class MeterArchine extends HashMap<String, Meter> {}
 
 class MeterArchine {
 
-  // Use hashmaps for O(1) lookup
+  /* Use hashmaps for O(1) lookup
+   *
+   * It said "a list" in the problem statement, but I interpret that
+   * as "a functor"
+  */
   private HashMap<String, Meter> posMap = new HashMap<String, Meter> ();
   private HashMap<String, Meter> regMap = new HashMap<String, Meter> ();
 
